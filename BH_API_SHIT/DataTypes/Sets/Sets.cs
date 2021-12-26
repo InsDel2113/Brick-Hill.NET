@@ -18,11 +18,10 @@ namespace BH_API_SHIT
 
         public Sets GetSet(int ID)
         {
-            var FetchSet = Bot.HttpClient.GetAsync(Bot.BaseURL + "/v1/sets/" + ID);
-            var FetchSetResult = FetchSet.Result.Content.ReadAsStringAsync().Result;
-            FetchSetResult = FetchSetResult.Remove(0, 8);
-            FetchSetResult = FetchSetResult.Remove(FetchSetResult.Length - 1, 1);
-            Sets item = JsonConvert.DeserializeObject<Sets>(FetchSetResult);
+            var FetchSet = Bot.MakeRequest("/v1/sets/" + ID);
+            FetchSet = FetchSet.Remove(0, 8);
+            FetchSet = FetchSet.Remove(FetchSet.Length - 1, 1);
+            Sets item = JsonConvert.DeserializeObject<Sets>(FetchSet);
             return item;
         }
 

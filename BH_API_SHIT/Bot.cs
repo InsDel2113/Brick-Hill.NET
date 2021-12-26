@@ -63,7 +63,6 @@ namespace BH_API_SHIT
             }
 
 
-
             // Get avatar info
             var avatar = new Avatar();
             avatar = avatar.GetAvatar(199939);
@@ -95,6 +94,15 @@ namespace BH_API_SHIT
             {
                 Console.WriteLine($"ID: {item.id}, Item ID: {item.item.id}, Item serial: {item.serial}, Item name: {item.item.name}");
             }
+        }
+
+        // Simple function just to make simple GET->response web requests a bit shorter
+        public static string MakeRequest(string APIURL)
+        {
+            // "/v1/user/id?username="
+            var FetchRequest = Bot.HttpClient.GetAsync(Bot.BaseURL + APIURL);
+            var FetchRequestResult = FetchRequest.Result.Content.ReadAsStringAsync().Result;
+            return FetchRequestResult;
         }
     }
 }

@@ -12,12 +12,12 @@ namespace BH_API_SHIT
         public string title { get; set; }
         public DateTime created_at { get; set; }
 
-        public Clan GetClan(int ID)
+        public Clan GetClan(int ID, bool remove_breaks = true)
         {
-            var FetchClan = Bot.HttpClient.GetAsync(Bot.BaseURL + "/v1/clan/clan?id=" + ID);
-            var FetchClanResult = FetchClan.Result.Content.ReadAsStringAsync().Result;
-            Clan clan = JsonConvert.DeserializeObject<Clan>(FetchClanResult);
-            clan.title = clan.title.Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
+            var FetchClan = Bot.MakeRequest("/v1/clan/clan?id=" + ID);
+            Clan clan = JsonConvert.DeserializeObject<Clan>(FetchClan);
+            if (remove_breaks) 
+              clan.title = clan.title.Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
             return clan;
         }
 

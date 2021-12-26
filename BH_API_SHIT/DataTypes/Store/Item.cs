@@ -27,26 +27,23 @@ namespace BH_API_SHIT
 
         public Item GetItem(int ID)
         {
-            var FetchItem = Bot.HttpClient.GetAsync(Bot.BaseURL + "/v1/shop/" + ID);
-            var FetchItemResult = FetchItem.Result.Content.ReadAsStringAsync().Result;
-            FetchItemResult = FetchItemResult.Remove(0, 8);
-            FetchItemResult = FetchItemResult.Remove(FetchItemResult.Length - 1, 1);
-            Item item = JsonConvert.DeserializeObject<Item>(FetchItemResult);
+            var FetchItem = Bot.MakeRequest("/v1/shop/" + ID);
+            FetchItem = FetchItem.Remove(0, 8);
+            FetchItem = FetchItem.Remove(FetchItem.Length - 1, 1);
+            Item item = JsonConvert.DeserializeObject<Item>(FetchItem);
             return item;
         }
 
         public OwnerList GetOwnerList(int limit = 10)
         {
-            var FetchItem = Bot.HttpClient.GetAsync(Bot.BaseURL + "/v1/shop/" + id + "/owners?limit=" + limit);
-            var FetchItemResult = FetchItem.Result.Content.ReadAsStringAsync().Result;
-            OwnerList ownerlist = JsonConvert.DeserializeObject<OwnerList>(FetchItemResult);
+            var FetchItem = Bot.MakeRequest("/v1/shop/" + id + "/owners?limit=" + limit);
+            OwnerList ownerlist = JsonConvert.DeserializeObject<OwnerList>(FetchItem);
             return ownerlist;
         }
         public ResellerList GetResellerList(int limit = 10)
         {
-            var FetchItem = Bot.HttpClient.GetAsync(Bot.BaseURL + "/v1/shop/" + id + "/resellers?limit=" + limit);
-            var FetchItemResult = FetchItem.Result.Content.ReadAsStringAsync().Result;
-            ResellerList ownerlist = JsonConvert.DeserializeObject<ResellerList>(FetchItemResult);
+            var FetchItem = Bot.MakeRequest("/v1/shop/" + id + "/resellers?limit=" + limit);
+            ResellerList ownerlist = JsonConvert.DeserializeObject<ResellerList>(FetchItem);
             return ownerlist;
         }
 

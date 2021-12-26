@@ -20,20 +20,18 @@ namespace BH_API_SHIT
 
         public User GetUser(int ID)
         {
-            var FetchUser = Bot.HttpClient.GetAsync(Bot.BaseURL + "/v1/user/profile?id=" + ID);
-            var FetchUserResult = FetchUser.Result.Content.ReadAsStringAsync().Result;
-            User user = JsonConvert.DeserializeObject<User>(FetchUserResult);
+            var FetchUser = Bot.MakeRequest("/v1/user/profile?id=" + ID);
+            User user = JsonConvert.DeserializeObject<User>(FetchUser);
             return user;
         }
         public User GetUser(string username)
         {
-            var UsernameToId = Bot.HttpClient.GetAsync(Bot.BaseURL + "/v1/user/id?username=" + username);
-            var UsernameToIdResult = UsernameToId.Result.Content.ReadAsStringAsync().Result;
-            IdToUsername user_to_id = JsonConvert.DeserializeObject<IdToUsername>(UsernameToIdResult);
-
+            // username -> id
+            var UsernameToID = Bot.MakeRequest("/v1/user/id?username=" + username);
+            IdToUsername user_to_id = JsonConvert.DeserializeObject<IdToUsername>(UsernameToID);
+            // the id of the input username
             int ID = user_to_id.id;
-            var FetchUser = Bot.HttpClient.GetAsync(Bot.BaseURL + "/v1/user/profile?id=" + ID);
-            var FetchUserResult = FetchUser.Result.Content.ReadAsStringAsync().Result;
+            var FetchUserResult = Bot.MakeRequest("/v1/user/profile?id=" + ID);
             User user = JsonConvert.DeserializeObject<User>(FetchUserResult);
             return user;
         }
@@ -45,10 +43,9 @@ namespace BH_API_SHIT
 
         public bool OwnsItem(int itemID)
         {
-            var FetchOwnsItem = Bot.HttpClient.GetAsync(Bot.BaseURL + $"/v1/user/{id}/owns/{itemID}");
-            var FetchOwnsItemResult = FetchOwnsItem.Result.Content.ReadAsStringAsync().Result;
-            // we use dynamic parse here because it's legit one data type
-            dynamic result = JObject.Parse(FetchOwnsItemResult);
+            var FetchOwnsItem = Bot.MakeRequest($"/v1/user/{id}/owns/{itemID}");
+            // we use dynamic parse here because it's legit one var one type
+            dynamic result = JObject.Parse(FetchOwnsItem);
             return (bool)result.owns;
         }
     }

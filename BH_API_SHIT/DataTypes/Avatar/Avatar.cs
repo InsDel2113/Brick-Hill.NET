@@ -32,15 +32,14 @@ namespace BH_API_SHIT
         }
         public Avatar GetAvatar(int ID)
         {
-            var FetchAvatar = Bot.HttpClient.GetAsync(Bot.BaseURL + "/v1/games/retrieveAvatar?id=" + ID);
-            var FetchAvatarResult = FetchAvatar.Result.Content.ReadAsStringAsync().Result;
-            Avatar avatar = JsonConvert.DeserializeObject<Avatar>(FetchAvatarResult);
+            var FetchAvatar = Bot.MakeRequest("/v1/games/retrieveAvatar?id=" + ID);
+            Avatar avatar = JsonConvert.DeserializeObject<Avatar>(FetchAvatar);
             return avatar;
         }
 
         public void InfoPrint()
         {
-            Console.WriteLine($"-- User ID: {user_id}, Shirt ID: {items.shirt} Pants ID: {items.pants} Head color: {colors.head} Right arm color: {colors.right_arm} Left arm color: {colors.left_arm} Left leg color: {colors.left_leg} Right leg color: {colors.right_leg} Torso color: {colors.torso}");
+            Console.WriteLine($"-- Avatar  User ID: {user_id}, Shirt ID: {items.shirt} Pants ID: {items.pants} Head color: {colors.head} Right arm color: {colors.right_arm} Left arm color: {colors.left_arm} Left leg color: {colors.left_leg} Right leg color: {colors.right_leg} Torso color: {colors.torso}");
         }
 
 
