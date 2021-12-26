@@ -46,6 +46,9 @@ namespace BH_API_SHIT
             var FetchOwnsItem = Bot.MakeRequest($"/v1/user/{id}/owns/{itemID}");
             // we use dynamic parse here because it's legit one var one type
             dynamic result = JObject.Parse(FetchOwnsItem);
+            // in case it's a invalid user
+            if (result.owns == null)
+                return false;
             return (bool)result.owns;
         }
     }
