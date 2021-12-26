@@ -20,18 +20,18 @@ namespace BH_API_SHIT
 
         public User GetUser(int ID)
         {
-            var FetchUser = Bot.MakeRequest("/v1/user/profile?id=" + ID);
+            var FetchUser = Bot.MakeRequest($"/v1/user/profile?id={ID}");
             User user = JsonConvert.DeserializeObject<User>(FetchUser);
             return user;
         }
         public User GetUser(string username)
         {
             // username -> id
-            var UsernameToID = Bot.MakeRequest("/v1/user/id?username=" + username);
+            var UsernameToID = Bot.MakeRequest($"/v1/user/id?username={username}");
             IdToUsername user_to_id = JsonConvert.DeserializeObject<IdToUsername>(UsernameToID);
             // the id of the input username
             int ID = user_to_id.id;
-            var FetchUserResult = Bot.MakeRequest("/v1/user/profile?id=" + ID);
+            var FetchUserResult = Bot.MakeRequest($"/v1/user/profile?id={id}");
             User user = JsonConvert.DeserializeObject<User>(FetchUserResult);
             return user;
         }

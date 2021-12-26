@@ -27,7 +27,7 @@ namespace BH_API_SHIT
 
         public Item GetItem(int ID)
         {
-            var FetchItem = Bot.MakeRequest("/v1/shop/" + ID);
+            var FetchItem = Bot.MakeRequest($"/v1/shop/{ID}");
             FetchItem = FetchItem.Remove(0, 8);
             FetchItem = FetchItem.Remove(FetchItem.Length - 1, 1);
             Item item = JsonConvert.DeserializeObject<Item>(FetchItem);
@@ -36,13 +36,13 @@ namespace BH_API_SHIT
 
         public OwnerList GetOwnerList(int limit = 10)
         {
-            var FetchItem = Bot.MakeRequest("/v1/shop/" + id + "/owners?limit=" + limit);
+            var FetchItem = Bot.MakeRequest($"/v1/shop/{id}/owners?limit={limit}");
             OwnerList ownerlist = JsonConvert.DeserializeObject<OwnerList>(FetchItem);
             return ownerlist;
         }
         public ResellerList GetResellerList(int limit = 10)
         {
-            var FetchItem = Bot.MakeRequest("/v1/shop/" + id + "/resellers?limit=" + limit);
+            var FetchItem = Bot.MakeRequest($"/v1/shop/{id}/resellers?limit={limit}");
             ResellerList ownerlist = JsonConvert.DeserializeObject<ResellerList>(FetchItem);
             return ownerlist;
         }

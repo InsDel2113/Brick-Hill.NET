@@ -32,7 +32,7 @@ namespace BH_API_SHIT
         }
         public Avatar GetAvatar(int ID)
         {
-            var FetchAvatar = Bot.MakeRequest("/v1/games/retrieveAvatar?id=" + ID);
+            var FetchAvatar = Bot.MakeRequest($"/v1/games/retrieveAvatar?id={ID}");
             Avatar avatar = JsonConvert.DeserializeObject<Avatar>(FetchAvatar);
             return avatar;
         }

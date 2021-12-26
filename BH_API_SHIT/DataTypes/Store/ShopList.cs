@@ -12,7 +12,7 @@ namespace BH_API_SHIT
 
         public ShopList GetShopList(int limit = 10)
         {
-            var FetchShop = Bot.MakeRequest("/v1/shop/list?sort=updated&limit=" + limit);
+            var FetchShop = Bot.MakeRequest($"/v1/shop/list?sort=updated&limit={limit}");
             ShopList shoplist = JsonConvert.DeserializeObject<ShopList>(FetchShop);
             return shoplist;
         }

@@ -14,10 +14,10 @@ namespace BH_API_SHIT
 
         public Clan GetClan(int ID, bool remove_breaks = true)
         {
-            var FetchClan = Bot.MakeRequest("/v1/clan/clan?id=" + ID);
+            var FetchClan = Bot.MakeRequest($"/v1/clan/clan?id={ID}");
             Clan clan = JsonConvert.DeserializeObject<Clan>(FetchClan);
-            if (remove_breaks) 
-              clan.title = clan.title.Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
+            if (remove_breaks)
+                clan.title = clan.title.Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
             return clan;
         }
 
