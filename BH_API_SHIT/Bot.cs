@@ -12,7 +12,8 @@ namespace BH_API_SHIT
         public static HttpClient HttpClient { get; set; }
         // brick_hill_session
         public string SessionToken = "";
-        public void Run()
+
+        public void SetupHttpClient()
         {
             // Make the cookie container, make the handler and assign the cookie container to it, add the session token to the cookies and make the client with the handler!
             var cookieContainer = new CookieContainer();
@@ -20,8 +21,18 @@ namespace BH_API_SHIT
             cookieContainer.Add(new Uri(BaseURL), new Cookie("brick_hill_session", SessionToken));
             HttpClient = new HttpClient(handler);
 
-            /* Some examples */
+            // just trying to not get fricked by cloudflare
+            // discord quote: "Jefemy: change your useragent" - this is allowed
+            HttpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:95.0) Gecko/20100101 Firefox/95.0");
+            HttpClient.DefaultRequestHeaders.Add("Accept-Language", "en-us;q=0.5");
+            HttpClient.DefaultRequestHeaders.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8,application/json");
+        }
 
+        public void Run()
+        {
+            SetupHttpClient();
+
+            /* Some examples */
             // Get user
             var User = new User();
             User = User.GetUser(199939); // User.GetUser("InsDel") also works, does username -> id lookup
@@ -50,9 +61,15 @@ namespace BH_API_SHIT
                 Console.WriteLine($"ID: {item.crate_id}, User: {item.user.username}, Serial: {item.serial}, Price: {item.bucks}");
             }
 
+            // Get trade
+            var Trade = new Trade();
+            Trade = Trade.GetTrade(294964);
+            Trade.InfoPrint();
+
+
             // Get clan
             var Clan = new Clan();
-            Clan = Clan.GetClan(27); // Brick Hill Staf Clan
+            Clan = Clan.GetClan(27); // Brick Hill Staff Clan
             Clan.InfoPrint();
             // Get clan members
             Console.WriteLine("-- Get clan members --");

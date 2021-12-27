@@ -18,9 +18,17 @@ namespace BH_API_SHIT
 
         public Membership membership;
 
+        public bool valid_object = false;
+
         public User GetUser(int ID)
         {
             var FetchUser = Bot.MakeRequest($"/v1/user/profile?id={ID}");
+            if ( FetchUser.Contains("error") )
+            {
+                valid_object = false;
+                return null;
+            }
+            valid_object = true;
             User user = JsonConvert.DeserializeObject<User>(FetchUser);
             return user;
         }
@@ -32,6 +40,12 @@ namespace BH_API_SHIT
             // the id of the input username
             int ID = user_to_id.id;
             var FetchUserResult = Bot.MakeRequest($"/v1/user/profile?id={id}");
+            if (FetchUserResult.Contains("error"))
+            {
+                valid_object = false;
+                return null;
+            }
+            valid_object = true;
             User user = JsonConvert.DeserializeObject<User>(FetchUserResult);
             return user;
         }
@@ -43,6 +57,8 @@ namespace BH_API_SHIT
 
         public bool OwnsItem(int itemID)
         {
+            if (!valid_object)
+                return false;
             var FetchOwnsItem = Bot.MakeRequest($"/v1/user/{id}/owns/{itemID}");
             // we use dynamic parse here because it's legit one var one type
             dynamic result = JObject.Parse(FetchOwnsItem);
@@ -50,6 +66,14 @@ namespace BH_API_SHIT
             if (result.owns == null)
                 return false;
             return (bool)result.owns;
+        }
+
+        public BH_API_SHIT.Crate.UserCrate GetCrate(int Limit = 100)
+        {
+            if (!valid_object)
+                return null;
+            var Crate = new Crate().GetCrate(id, Limit);
+            return Crate;
         }
     }
 }
