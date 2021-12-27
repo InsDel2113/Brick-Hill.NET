@@ -48,7 +48,7 @@ namespace BH_API_SHIT
 
         public Trade GetTrade(int ID, string Type = "")
         {
-            var FetchTrade = Bot.MakeRequest($"/v1/user/trades/{ID}/{Type}");
+            var FetchTrade = Bot.MakeRequest($"{APIUrls.USER_TRADES}{ID}/{Type}");
             Trade TradeInfo = JsonConvert.DeserializeObject<Trade>(FetchTrade);
             return TradeInfo;
         }

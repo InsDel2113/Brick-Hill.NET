@@ -35,7 +35,7 @@ namespace BH_API_SHIT
 
         public UserCrate GetCrate(int ID, int Limit = 10)
         {
-            var FetchCrate = Bot.MakeRequest($"/v1/user/{ID}/crate?limit={Limit}");
+            var FetchCrate = Bot.MakeRequest($"{APIUrls.USER_FETCH}{ID}/{APIUrls.USER_CRATE}?limit={Limit}");
             UserCrate crate = JsonConvert.DeserializeObject<UserCrate>(FetchCrate);
             return crate;
         }

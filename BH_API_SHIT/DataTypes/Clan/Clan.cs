@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BH_API_SHIT
 {
@@ -14,11 +15,23 @@ namespace BH_API_SHIT
 
         public Clan GetClan(int ID, bool remove_breaks = true)
         {
-            var FetchClan = Bot.MakeRequest($"/v1/clan/clan?id={ID}");
+            var FetchClan = Bot.MakeRequest($"{APIUrls.CLAN_FETCH}?id={ID}");
             Clan clan = JsonConvert.DeserializeObject<Clan>(FetchClan);
             if (remove_breaks)
                 clan.title = clan.title.Replace("\r\n", "").Replace("\r", "").Replace("\n", "");
             return clan;
+        }
+
+        public Clan GetClan(string Name)
+        {
+            var FetchRelations = Bot.HttpClient.GetAsync($"https://www.brick-hill.com/api/clans/relations/1/{Name}");
+            var FetchRelationsResult = FetchRelations.Result.Content.ReadAsStringAsync().Result;
+            RelationsRoot relations = JsonConvert.DeserializeObject<RelationsRoot>(FetchRelationsResult);
+            if (relations.data.Count > 0)
+            {
+                return GetClan(relations.data.First().id);
+            }
+            return null;
         }
 
         public void InfoPrint()
@@ -33,6 +46,20 @@ namespace BH_API_SHIT
             MemberListData memberlist = JsonConvert.DeserializeObject<MemberListData>(FetchClanResult);
             return memberlist;
         }
+
+        public class RelationSearch
+        {
+            public int id { get; set; }
+            public string title { get; set; }
+            public string thumbnail { get; set; }
+        }
+
+        public class RelationsRoot
+        {
+            public List<RelationSearch> data { get; set; }
+        }
+
+
 
         public class MemberListData
         {

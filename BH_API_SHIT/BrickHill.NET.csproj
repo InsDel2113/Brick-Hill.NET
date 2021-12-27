@@ -65,6 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="APIUrls.cs" />
     <Compile Include="DataTypes\Avatar\Avatar.cs" />
     <Compile Include="DataTypes\Clan\Clan.cs" />
     <Compile Include="DataTypes\Crates\Crate.cs" />

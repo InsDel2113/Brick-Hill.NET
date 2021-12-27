@@ -18,7 +18,7 @@ namespace BH_API_SHIT
 
         public Sets GetSet(int ID)
         {
-            var FetchSet = Bot.MakeRequest($"/v1/sets/{ID}");
+            var FetchSet = Bot.MakeRequest($"{APIUrls.SETS_FETCH}{ID}");
             FetchSet = FetchSet.Remove(0, 8);
             FetchSet = FetchSet.Remove(FetchSet.Length - 1, 1);
             Sets item = JsonConvert.DeserializeObject<Sets>(FetchSet);

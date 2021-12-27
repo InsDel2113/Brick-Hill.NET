@@ -7,8 +7,6 @@ namespace BH_API_SHIT
 {
     public class Bot
     {
-        // api base url
-        public static string BaseURL = "https://api.brick-hill.com";
         public static HttpClient HttpClient { get; set; }
         // brick_hill_session
         public string SessionToken = "";
@@ -18,7 +16,7 @@ namespace BH_API_SHIT
             // Make the cookie container, make the handler and assign the cookie container to it, add the session token to the cookies and make the client with the handler!
             var cookieContainer = new CookieContainer();
             var handler = new HttpClientHandler() { CookieContainer = cookieContainer };
-            cookieContainer.Add(new Uri(BaseURL), new Cookie("brick_hill_session", SessionToken));
+            cookieContainer.Add(new Uri(APIUrls.BASE_URL), new Cookie("brick_hill_session", SessionToken));
             HttpClient = new HttpClient(handler);
 
             // just trying to not get fricked by cloudflare
@@ -36,9 +34,12 @@ namespace BH_API_SHIT
             // Get user
             var User = new User();
             User = User.GetUser(199939); // User.GetUser("InsDel") also works, does username -> id lookup
-            User.InfoPrint();
-            // User.OwnsItem(itemid) - does user own itemid?
-            Console.WriteLine(" -Does user own item: " + User.OwnsItem(304637).ToString());
+            if (User != null) // check if things are valid by checking if they are null or id=0 (initialized but not fetched)
+            {
+                User.InfoPrint();
+                // User.OwnsItem(itemid) - does user own itemid?
+                Console.WriteLine(" -Does user own item: " + User.OwnsItem(304637).ToString());
+            }
 
             // Get item
             var Item = new Item();
@@ -70,6 +71,8 @@ namespace BH_API_SHIT
             // Get clan
             var Clan = new Clan();
             Clan = Clan.GetClan(27); // Brick Hill Staff Clan
+            // you can also search by name
+            // Clan = Clan.GetClan("Brick Hill Staff");
             Clan.InfoPrint();
             // Get clan members
             Console.WriteLine("-- Get clan members --");
@@ -117,7 +120,7 @@ namespace BH_API_SHIT
         public static string MakeRequest(string APIURL)
         {
             // "/v1/user/id?username="
-            var FetchRequest = Bot.HttpClient.GetAsync(Bot.BaseURL + APIURL);
+            var FetchRequest = Bot.HttpClient.GetAsync(APIUrls.BASE_URL + APIURL);
             var FetchRequestResult = FetchRequest.Result.Content.ReadAsStringAsync().Result;
             return FetchRequestResult;
         }
