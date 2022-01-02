@@ -1,4 +1,7 @@
-﻿using System;
+﻿using BH_API_SHIT;
+using Newtonsoft.Json;
+using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using static BrickHillDotNet.Crate;
@@ -9,7 +12,7 @@ namespace BrickHillDotNet
     {
         public static HttpClient HttpClient { get; set; }
         // brick_hill_session
-        public string SessionToken = "";
+        public static string SessionToken = "";
 
         public void SetupHttpClient()
         {
@@ -32,8 +35,7 @@ namespace BrickHillDotNet
 
             /* Some examples */
             // Get user
-            var User = new User();
-            User = User.GetUser(199939); // User.GetUser("InsDel") also works, does username -> id lookup
+            var User = new User().GetUser(199939); // User.GetUser("InsDel") also works, does username -> id lookup
             if (User != null) // check if things are valid by checking if they are null or id=0 (initialized but not fetched)
             {
                 User.InfoPrint();
@@ -42,8 +44,7 @@ namespace BrickHillDotNet
             }
 
             // Get item
-            var Item = new Item();
-            Item = Item.GetItem(304637);
+            var Item = new Item().GetItem(304637);
             Item.InfoPrint();
             Console.WriteLine("--  Item owner list: --");
 
@@ -62,17 +63,25 @@ namespace BrickHillDotNet
                 Console.WriteLine($"ID: {item.crate_id}, User: {item.user.username}, Serial: {item.serial}, Price: {item.bucks}");
             }
 
-            // Get trade
-            var Trade = new Trade();
-            Trade = Trade.GetTrade(294964);
-            Trade.InfoPrint();
 
+
+            // Error handling: if you don't try catch this, a exception is thrown complaining about the non authenticated api error (if you didn't set SessionToken!)
+            // This works on everything, if anything throws a api error it will throw a exception and it can be try-caught
+            try
+            {
+                // Get trade
+                var Trade = new Trade().GetTrade(294964);
+                Trade.InfoPrint();
+            } catch
+            {
+
+            }
+ 
 
             // Get clan
-            var Clan = new Clan();
-            Clan = Clan.GetClan(27); // Brick Hill Staff Clan
+            var Clan = new Clan().GetClan(27); // Brick Hill Staff Clan
             // you can also search by name
-            // Clan = Clan.GetClan("Brick Hill Staff");
+            //  Clan = new Clan().GetClan("Brick Hill Staff");
             Clan.InfoPrint();
             // Get clan members
             Console.WriteLine("-- Get clan members --");
@@ -84,23 +93,23 @@ namespace BrickHillDotNet
 
 
             // Get avatar info
-            var avatar = new Avatar();
-            avatar = avatar.GetAvatar(199939);
+            var avatar = new Avatar().GetAvatar(199939);
             avatar.InfoPrint();
 
             // Get set
-            var Set = new Sets();
-            Set = Set.GetSet(2);
+            var Set = new Sets().GetSet(2);
             Set.InfoPrint();
 
 
             Console.WriteLine("-- Shop list, recent items --");
-            var shoplist = new ShopList();
-            shoplist = shoplist.GetShopList();
+            var shoplist = new ShopList().GetShopList();
             foreach (var item in shoplist.data)
             {
                 Console.WriteLine($"ID: {item.id}, Item name: {item.name}, Created at: {item.created_at}");
             }
+            Console.WriteLine("-- Shop list, newest item --");
+            var shoplistnewest = new ShopList().GetShopList(1, "newest");
+            Console.WriteLine(shoplistnewest.data.First().name);
 
             Console.WriteLine("--  Get user crate/inventory example  --");
             // Get user crate/inventory:
@@ -117,12 +126,30 @@ namespace BrickHillDotNet
         }
 
         // Simple function just to make simple GET->response web requests a bit shorter
+        // This also checks for API errors
         public static string MakeRequest(string APIURL)
         {
             // "/v1/user/id?username="
             var FetchRequest = Bot.HttpClient.GetAsync(APIUrls.BASE_URL + APIURL);
             var FetchRequestResult = FetchRequest.Result.Content.ReadAsStringAsync().Result;
+            Bot.CheckError(FetchRequestResult);
             return FetchRequestResult;
+        }
+        public static bool ValidSession()
+        {
+            // if ( Bot.SessionToken.Length < 1 || Bot.SessionToken. ) {
+            return true;
+        }
+        public static Error CheckError(string response)
+        {
+            Error error = JsonConvert.DeserializeObject<Error>(response);
+            if (error != null && error.error != null)
+            {
+                throw new Exception($"API returned error. Error: {error.error.prettyMessage}");
+                return error;
+            }
+            if ( error == null ) return null;
+            return null;
         }
     }
 }

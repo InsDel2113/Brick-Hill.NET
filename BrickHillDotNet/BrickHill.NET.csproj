@@ -69,6 +69,7 @@
     <Compile Include="DataTypes\Avatar\Avatar.cs" />
     <Compile Include="DataTypes\Clan\Clan.cs" />
     <Compile Include="DataTypes\Crates\Crate.cs" />
+    <Compile Include="DataTypes\Error.cs" />
     <Compile Include="DataTypes\Sets\Sets.cs" />
     <Compile Include="DataTypes\Store\OwnerList.cs" />
     <Compile Include="DataTypes\Store\ResellerList.cs" />
