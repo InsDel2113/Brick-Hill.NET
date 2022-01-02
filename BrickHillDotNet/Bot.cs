@@ -1,5 +1,4 @@
-﻿using BH_API_SHIT;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Net;
@@ -72,11 +71,19 @@ namespace BrickHillDotNet
                 // Get trade
                 var Trade = new Trade().GetTrade(294964);
                 Trade.InfoPrint();
-            } catch
+            }
+            catch
             {
 
             }
- 
+
+            // accepts a second parameter "type", go to it's definition to see all of them!
+            var TradeList = new TradeList().GetTradeList(199939);
+            foreach (var Trade in TradeList.data)
+            {
+                Console.WriteLine($"Trade list: Trade ID: {Trade.id} Trade user (to/from): {Trade.user.username}");
+            }
+
 
             // Get clan
             var Clan = new Clan().GetClan(27); // Brick Hill Staff Clan
@@ -107,6 +114,7 @@ namespace BrickHillDotNet
             {
                 Console.WriteLine($"ID: {item.id}, Item name: {item.name}, Created at: {item.created_at}");
             }
+
             Console.WriteLine("-- Shop list, newest item --");
             var shoplistnewest = new ShopList().GetShopList(1, "newest");
             Console.WriteLine(shoplistnewest.data.First().name);
@@ -135,11 +143,7 @@ namespace BrickHillDotNet
             Bot.CheckError(FetchRequestResult);
             return FetchRequestResult;
         }
-        public static bool ValidSession()
-        {
-            // if ( Bot.SessionToken.Length < 1 || Bot.SessionToken. ) {
-            return true;
-        }
+
         public static Error CheckError(string response)
         {
             Error error = JsonConvert.DeserializeObject<Error>(response);
@@ -148,7 +152,7 @@ namespace BrickHillDotNet
                 throw new Exception($"API returned error. Error: {error.error.prettyMessage}");
                 return error;
             }
-            if ( error == null ) return null;
+            if (error == null) return null;
             return null;
         }
     }

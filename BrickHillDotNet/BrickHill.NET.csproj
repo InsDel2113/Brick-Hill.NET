@@ -75,6 +75,7 @@
     <Compile Include="DataTypes\Store\ResellerList.cs" />
     <Compile Include="DataTypes\Store\ShopList.cs" />
     <Compile Include="DataTypes\Trading\Trade.cs" />
+    <Compile Include="DataTypes\Trading\TradeList.cs" />
     <Compile Include="DataTypes\User\AwardChild.cs" />
     <Compile Include="DataTypes\User\AwardParent.cs" />
     <Compile Include="Bot.cs" />
